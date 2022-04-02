@@ -1,2 +1,4 @@
 Pipfile.lock
 Pipfile
+worker/worker.egg-info/
+**/__pycache__/
