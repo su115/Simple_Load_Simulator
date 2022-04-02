@@ -1,0 +1,17 @@
+language: python
+os: ubuntu
+arch: amd64
+jobs:
+        include: 
+         - name: "Linux Ubuntu"
+           python: 3.7.3
+           
+           
+install:
+        - pip3 install pipenv
+script:
+        - echo "first step 1!"
+        - pipenv --three
+        - pipenv run pip3 install -e ./worker/
+
+                  
