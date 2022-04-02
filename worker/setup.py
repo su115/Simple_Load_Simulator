@@ -11,7 +11,7 @@ setup(name="worker",
         install_requires=[
             'pytest',
             'requests',
-            ]
+            ],
         include_package_data=True,
         distclass=BinaryDistribution,
         )
