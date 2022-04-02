@@ -1,8 +1,8 @@
 Pipfile.lock
 Pipfile
 **/__pycache__/
-**.pyc
-**.swp
-**.pytest_cache
+*.pyc
+*.swp
+*.pytest_cache
 worker/worker.egg-info/
 worker/worker.egg-info/*
