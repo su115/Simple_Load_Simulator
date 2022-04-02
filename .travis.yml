@@ -13,5 +13,6 @@ script:
         - echo "first step 1!"
 #        - pipenv --three
         - pipenv install -e ./worker/
+        - pipenv run pytest  ./worker/worker/tests/
 
                   

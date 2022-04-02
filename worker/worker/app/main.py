@@ -10,11 +10,17 @@ class WRequest:
             return headers
         # check type == dict
         if type(headers) != type(dict()):
-            raise ValueError(cname+"headers is not dict!!!")
+            raise ValueError(self.cname+"headers is not dict!!!")
         # check dict( key,values ) == str
-        for key,value in headers:
-                if type(key) != type(str()) or type(value) != type(str):
-                    raise ValueError(cname+"headers is dict but one of values is not str!!!")
+        for key in headers:
+                if not type(key) == type(str()) and type(headers[key]) == type(str):
+
+                    t1 = str(type(key))
+                    t2 = str(type(headers[key]))
+                    raise ValueError(self.cname+f"""headers is dict but one of values is not str!!!
+                            key:\t{key}\t{t1}
+                            value:\t{headers[key]}\t{t2}
+                            """)
         return headers
 
 
