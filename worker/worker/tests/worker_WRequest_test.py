@@ -21,7 +21,7 @@ def test_init_with_right_header_params():
         try:
             print(header)
             req = WRequest(header)
-            assert req.headers == header
+            assert req.headers== header
         except:
             print("Init with expected values create error")
             assert True == False
