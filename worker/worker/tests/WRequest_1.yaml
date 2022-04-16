@@ -37,4 +37,4 @@ list_req:
   url: http://localhost:80
 name: test
 proxies:
-- socks5://your_dante_user:1231@localhost:45001
+- socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-16-171-4-123.eu-north-1.compute.amazonaws.com:45001
