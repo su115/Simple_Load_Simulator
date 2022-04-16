@@ -1,0 +1,40 @@
+list_req:
+- data:
+    some: data
+  headers:
+    id: '1'
+    test: 'yes'
+  method: GET
+  name: Test 1
+  params:
+    more: 'yes'
+  url: http://localhost:80
+- data:
+    some: data
+  headers:
+    id: '1'
+    test: 'yes'
+  method: GET
+  name: Test 2
+  url: http://localhost:80
+- headers:
+    id: '1'
+    test: 'yes'
+  method: GET
+  name: Test 3
+  params:
+    more: 'yes'
+  url: http://localhost:80
+- data:
+    some: data
+  method: GET
+  name: Test 4
+  params:
+    more: 'yes'
+  url: http://localhost:80
+- method: GET
+  name: Test 5
+  url: http://localhost:80
+name: test
+proxies:
+- socks5://your_dante_user:1231@localhost:45001

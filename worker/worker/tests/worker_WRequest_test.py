@@ -1,44 +1,206 @@
 from worker.app.main import WRequest
-import pytest
+from worker.variables import *
+from worker.tests.create_yaml import *
+import pytest, requests, yaml, os
 
 @pytest.mark.testclass
 def test_init_without_params():
     try:
         req = WRequest() #without params
-    except:
-        print("Got Exception!")
-        assert False == True
-    assert req.headers == None
+        assert True 
+    except TypeError:
+        print("Exception!")
+        assert False
 
 @pytest.mark.testclass
-def test_init_with_right_header_params():
-    header_list = [ 
-            {"123":"123"},
-            {"sad":"not sad","right":"wrong"},
-            {"Content":"test",}
-            ]
-    for header in header_list:
-        try:
-            print(header)
-            req = WRequest(header)
-            assert req.headers== header
-        except:
-            print("Init with expected values create error")
-            assert True == False
-               
+def test_init_with_wrong_params():
+        _list = [
+                "aaa",
+                3.14,
+                1232131,
+                True,
+                ] 
+        for i in _list:
+            try:
+                my_instance = i
+                my_url = "http://wiki.org"
+                WRequest(instance=my_instance, url=my_url)
+                assert False
+            except ValueError:
+                assert True
+            except:
+                assert False
+
+
 @pytest.mark.testclass
-def test_init_with_wrong_header_params():
-    header_list = [ 
-            {"123":123},
-            {"sad":"not sad","right":34.3},
-            ]
-    for header in header_list:
-        try:
-            req = WRequest(header)
-            #assert req.header == header
-        except ValueError:
-            assert True == True
-        except:
-            print("Init with unexpected values create enexpected error")
-            assert True == False
+def test_init_with_right_params():
+    try:
+        my_instance = requests.Session()
+                      
+        my_url = "http://wiki.org"
+        WRequest(instance=my_instance, url=my_url)
+    except:
+        assert False 
+
+
+@pytest.mark.testclass
+def test_init_with_right_dict_params():
+    dict_of_list = {
+            "headers":[#headers 
+                {"123":"123"},
+                {"sad":"not sad","right":"wrong"},
+                {"Content":"test",}
+            ],
+            "proxies":[#proxies
+                [
+                 f'\"{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}\"',     
+                ],
+            ],
+            "method":[#Type
+                "\"GET\"",
+                "\"POST\"",
+                "\"PUT\"",
+                "\"PATCH\"",# We use eval and need string
+                ],
+            "url":[#url
+                "\'http://192.168.0.107\'",
+                "'http://192.168.0.107:67'",
+                "'https://192.168.0.107'",
+                '"https://192.168.0.107:45001"',
+                "\"http://google.com\"",
+                "\"https://google.com\"",
+                ],
+            "data":[#data
+                {"123":"123"},
+                {"sad":"not sad","right":"wrong"},
+                {"Content":"test",}               
+                ],
+            "params":[#params
+                {"123":"123"},
+                {"sad":"not sad","right":"wrong"},
+                {"Content":"test",}               
+                ],
+
+
+    }
+    instance = requests.Session()
+    for _dict in dict_of_list:
+        
+        for _item in dict_of_list[_dict]:
+            try:
+                print(_dict,_item)
+                req = eval( WRequest.__name__+ f"""( 
+                    instance=None,
+                    {_dict}={_item}
+                    )""")
+                assert True 
+            except ValueError:
+                assert False
+            except:
+                print("Init with expected values create error")
+                assert False
+
+
+@pytest.mark.testclass
+def test_init_with_wrong_dict_params():
+    dict_of_list = {
+            "headers":[#headers 
+                {"123":123},
+                { 123:"not sad","right": None},
+                {"Content": True,}
+            ],
+            "proxies":[#proxies list(str)
+                [
+                    f'{proxies_protocol}',
+                    "\"123\"",
+                    "None",
+                    f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}',
+                    f'{proxies_protocol}',
+                    "True",                    
+                ],
+            ],
+            "method":[#Type
+                "\'get\'",
+                "\"POST1\"",
+                "123",
+                "True",# We use eval and need string
+                ],
+
+            "params":[#data 
+                {"123":123},
+                { 123:"not sad","right": None},
+                {"Content": True,}
+            ],
+            "data":[#headers 
+                {"123":123},
+                { 123:"not sad","right": None},
+                {"Content": True,}
+            ],
+    }
+    for _dict in dict_of_list:
+        
+        for _item in dict_of_list[_dict]:
+            try:
+                req = eval( WRequest.__name__+ f"""( 
+                    instance=\'None\',
+                    url=\'None\',
+                    {_dict}={_item}
+                    )""")
+                assert  False
+            except ValueError:
+                # Not so bad
+                assert  True
+            except:
+                print("Init with expected values create error")
+                assert  False
  
+@pytest.mark.testclass
+def test_make_prepped():
+    method = "GET"
+    url = "http://test.me.com"
+    headers = {"Content":"test_1"}
+    req = requests.Request(
+            method=method,
+            url=url,
+            headers=headers,
+            )
+    prepped = req.prepare()
+    instance = WRequest(
+            url=url,
+            method=method,
+            headers=headers,
+            )
+    test = instance._make_prepped()
+    print("test"+str(test))
+    print("prepped"+str(prepped))
+
+    assert instance.prepped.url == prepped.url
+    assert instance.prepped.method == prepped.method
+    assert instance.prepped.headers == prepped.headers
+@pytest.mark.testclass
+def test_send():
+    url = test_server_url
+    method = "GET"
+    headers = {"Cook":"Duck"}
+    req = WRequest(
+            url=url,
+            method=method,
+            headers=headers,
+            )
+    answer = req.send()
+    print(answer.status_code)
+    assert answer.status_code == 200
+@pytest.mark.testclass
+def test_got_yaml():
+    get_yaml_file() #from create_yaml.py
+    path = os.path.dirname(os.path.realpath(__file__))
+    with open( path+'/WRequest_1.yaml') as f:
+        data = yaml.load(f,Loader=yaml.FullLoader)
+        print("Data:",data)
+        req = WRequest()
+        req.set_proxies(data['proxies'])
+        for request in data['list_req']:
+            req.got_yaml(request)
+            answer = req.send()
+            assert answer.status_code == 200
+

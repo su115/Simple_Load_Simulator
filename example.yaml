@@ -1,0 +1,24 @@
+--- 
+block: 
+    delay: "5"
+    name: test1 
+    sessions:  
+      - name: "Get_chain"
+        link: "same as previos"
+        list_wreq: 
+          - name: Get_with_id
+            method: "GET"
+            url: "http://localhost:80"
+            headers: 
+               "id": "value1223"
+            data: 
+               "yes": "False"
+            params:
+               "sex": "male"
+        make_req: "10"
+    proxy:
+                user: "None"
+                password: "None"
+                proxy_url: "http://proxy.com"
+    parallel: "no"
+

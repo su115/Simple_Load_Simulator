@@ -1,0 +1,41 @@
+name: "name of Session"
+proxies:
+        - "socks5://your_dante_user:1231@192.168.0.104:45001"
+list_req:
+        - name: "Initial"
+          method: "GET"
+          url: "http://localhost"
+          headers:
+                   "id": "values32"
+                   "com": "port"
+          params:
+                  "idsa": "sed"
+                  "more": "vim"
+          data:
+                  "sec": "23s"
+                  "idea": "None"
+        - name: "Test 1"
+          method: "GET"
+          url: "http://localhost"
+          headers:
+                   "id": "values33"
+                   "com": "port"
+          params:
+                  "idsa": "sed"
+                  "more": "vim"
+          data:
+                  "sec": "24s"
+                  "idea": "None"
+        - name: "End"
+          method: "GET"
+          url: "http://localhost"
+          headers:
+                   "id": "values34"
+                   "com": "port"
+          params:
+                  "idsa": "sed"
+                  "more": "vim"
+          data:
+                  "sec": "23s"
+                  "idea": "None"
+

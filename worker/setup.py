@@ -11,6 +11,8 @@ setup(name="worker",
         install_requires=[
             'pytest',
             'requests',
+            'validators',
+            'pyyaml',
             ],
         include_package_data=True,
         distclass=BinaryDistribution,
