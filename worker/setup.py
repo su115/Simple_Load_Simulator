@@ -15,6 +15,7 @@ setup(name="worker",
             'pyyaml',
             'requests[socks]',
             'varname',
+            'urllib3[socks]'
             ],
         include_package_data=True,
         distclass=BinaryDistribution,
