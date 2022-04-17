@@ -1,6 +1,7 @@
 from worker.app.main import WRequest
 from worker.variables import *
-from worker.tests.create_yaml import *
+from worker.tests.create_yaml1 import *
+from worker.tests.create_yaml2 import *
 import pytest, requests, yaml, os
 
 @pytest.mark.testclass
@@ -52,9 +53,12 @@ def test_init_with_right_dict_params():
                 {"Content":"test",}
             ],
             "proxies":[#proxies
-                [
-                 f'\"{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}\"',     
-                ],
+                
+                    {
+                        'http': f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}',
+                        'https': f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}',
+                    },     
+                
             ],
             "method":[#Type
                 "\"GET\"",
@@ -110,14 +114,14 @@ def test_init_with_wrong_dict_params():
                 {"Content": True,}
             ],
             "proxies":[#proxies list(str)
-                [
-                    f'{proxies_protocol}',
-                    "\"123\"",
-                    "None",
-                    f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}',
-                    f'{proxies_protocol}',
-                    "True",                    
-                ],
+                
+                    {'http': f'{proxies_protocol}'},
+                    {'http': "\"123\""},
+                    {'http': "None"},
+                    {'http': f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}'},
+                    {'http': f'{proxies_protocol}'},
+                    {"http": "True"},                    
+                
             ],
             "method":[#Type
                 "\'get\'",
@@ -192,7 +196,7 @@ def test_send():
     assert answer.status_code == 200
 @pytest.mark.testclass
 def test_got_yaml():
-    get_yaml_file() #from create_yaml.py
+    get_yaml_file() #from create_yaml1.py
     path = os.path.dirname(os.path.realpath(__file__))
     with open( path+'/WRequest_1.yaml') as f:
         data = yaml.load(f,Loader=yaml.FullLoader)
@@ -203,4 +207,36 @@ def test_got_yaml():
             req.got_yaml(request)
             answer = req.send()
             assert answer.status_code == 200
+@pytest.mark.testclass
+@pytest.mark.integration
+def test_nginx_integrations():
+    pack(random=True)
+    pack(random=False)
+    path = os.path.dirname(os.path.realpath(__file__))
 
+   # _yaml(path+'/WRequest_random.yaml')
+    _yaml(path+'/WRequest_related.yaml')
+
+def _yaml(filename):
+    with open( filename ) as f:
+        data = yaml.load(f,Loader=yaml.FullLoader)
+        print("Data:",data)
+        req = WRequest()
+        req.set_proxies(data['proxies'])
+        for request in data['list_req']:
+            req.got_yaml(request)
+            answer = req.send()
+
+            # check data
+            #assert answer.url == request['url'] # params change answer.url
+            assert req.url == request['url']
+            if 'params' in request:
+#            print("REQUEST:\t",request)
+#            req.get_status()
+#            print("DATA:\t",data)
+                 assert req.params == request['params']
+            if 'headers' in request:
+                assert req.headers == request['headers']
+            if 'data' in request:
+                assert req.data == request['data']
+            assert answer.ok

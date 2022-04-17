@@ -1,6 +1,8 @@
 #! /bin/python3
 import requests
 import validators
+import uuid
+#import copy
 class WRequest:
     cname = "WRequests:"
     #proxies = None   # dict    #proxies = { 'http' : 'https://user:password@proxiesip:port' }
@@ -13,7 +15,13 @@ class WRequest:
             headers=None,
             proxies=None,
             params=None,
+            name='None',
             ):
+        if name == None or self._is_type(name,str):
+            if name==None:
+                self.name='wreq-'+str(uuid.uuid4)
+            else:
+                self.name=name
         self.prepped = None
         self.headers = self._check_dict(headers,"headers")
         self.data = self._check_dict(data,"data") 
@@ -36,7 +44,7 @@ class WRequest:
             self._init_value_error(instance,"instance")
        
         #proxies
-        self.proxies = self._check_list(proxies,"proxies")
+        self.proxies = self._check_dict(proxies,"proxies")
 
         #url
         if self._is_type(url,str) and  validators.url(url):
@@ -77,15 +85,16 @@ class WRequest:
                 method=self.method,
                 url=self.url, 
                 headers=self.headers,
-                #data=self.data,
+                data=self.data,
+                params=self.params,
                 #proxies=self.proxies,
                 )
         self.prepped = req.prepare()
         return self.prepped
 
     def send(self): # Not checked
-        if self.prepped == None:
-            self._make_prepped()
+        #if self.prepped == None:
+        self._make_prepped()
         answer = self.instance.send(
                 self.prepped,
                 proxies=self.proxies,
@@ -117,6 +126,8 @@ class WRequest:
     def got_yaml(self,data):
             if self.instance == None:
                 self.instance = requests.Session() # Checked
+            if 'name' in data:
+                self.name=data['name']
             if "headers" in data:
                 self.headers=data["headers"]
             if 'method' in data:
@@ -126,10 +137,22 @@ class WRequest:
             if 'data' in data:
                 self.data=data['data']
             if 'params' in data:
-                self.params= data['params']
+                self.params=data['params']
+    def get_status(self):
+        print('='*23)
+        print( f"""
+        name:\t\t{self.name}
+        data:\t\t{self.data}
+        params:\t\t{self.params}
+        method:\t\t{self.method}
+        headers:\t{self.headers}
+        proxies:\t{self.proxies}
+        url:\t\t{self.url}
+        """)
+        print("="*23)
     def set_proxies(self,proxies):
             if self.instance == None:
                 self.instance = requests.Session() # Checked
-            self.proxies=self._check_list(proxies,"proxies")
+            self.proxies=self._check_dict(proxies,"proxies")
 
         

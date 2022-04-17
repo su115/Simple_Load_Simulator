@@ -1,15 +1,14 @@
-#from worker.app.main import WRequest
 from worker.variables import *
-#from worker.test.create_yaml import *
 import yaml, os
 
 # Static yaml
 def get_yaml_file():
     data = {
-            'name': "test",
-            "proxies": [
-                 f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}',     
-                ],
+            'name': "test1",
+            "proxies": {
+                 'http':  f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}',
+                 'https': f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}',
+                 },
             "list_req": [
                     {
                         "name": "Test 1",

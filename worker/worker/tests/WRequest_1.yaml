@@ -8,7 +8,7 @@ list_req:
   name: Test 1
   params:
     more: 'yes'
-  url: http://localhost:80
+  url: http://ec2-13-51-194-209.eu-north-1.compute.amazonaws.com
 - data:
     some: data
   headers:
@@ -16,7 +16,7 @@ list_req:
     test: 'yes'
   method: GET
   name: Test 2
-  url: http://localhost:80
+  url: http://ec2-13-51-194-209.eu-north-1.compute.amazonaws.com
 - headers:
     id: '1'
     test: 'yes'
@@ -24,17 +24,18 @@ list_req:
   name: Test 3
   params:
     more: 'yes'
-  url: http://localhost:80
+  url: http://ec2-13-51-194-209.eu-north-1.compute.amazonaws.com
 - data:
     some: data
   method: GET
   name: Test 4
   params:
     more: 'yes'
-  url: http://localhost:80
+  url: http://ec2-13-51-194-209.eu-north-1.compute.amazonaws.com
 - method: GET
   name: Test 5
-  url: http://localhost:80
-name: test
+  url: http://ec2-13-51-194-209.eu-north-1.compute.amazonaws.com
+name: test1
 proxies:
-- socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-16-171-4-123.eu-north-1.compute.amazonaws.com:45001
+  http: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-51-194-209.eu-north-1.compute.amazonaws.com:45001
+  https: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-51-194-209.eu-north-1.compute.amazonaws.com:45001
