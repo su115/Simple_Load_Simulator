@@ -6,3 +6,5 @@ Pipfile
 *.pytest_cache
 worker/worker.egg-info/
 worker/worker.egg-info/*
+*.crt
+*.key

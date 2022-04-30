@@ -1,10 +1,11 @@
 list_req:
-- name: req-67cf814a-5ea0-4518-b680-54d8c6e932b4
+- data:
+    orange: brown
+  name: req-ee6bc0d1-b733-432f-9106-16db1d875993
   params:
-    blue: orange
-    yellow: black
+    white: pink
   url: http://ec2-13-53-212-77.eu-north-1.compute.amazonaws.com
-name: session-26ca1f52-ac7e-4313-8634-242142687fec
+name: session-0e850faf-b451-4efa-bb31-c724ad47fe0f
 proxies:
   http: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:45001
   https: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:45001

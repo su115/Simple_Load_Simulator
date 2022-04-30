@@ -98,7 +98,7 @@ def _add_req(
 def get_yaml_data_related(table):  # related to test_server_url_table
     # l_sessions = []
     item = table
-    locations = item["locations"]
+    locations = item["list_req"]
     session = {}
     session["name"] = _get_name("session")
     session["proxies"] = item["proxies"]
