@@ -1,16 +1,16 @@
 list_req:
 - method: GET
-  name: req-c257fedc-e921-4b0c-b496-2646f54ce697
+  name: req-7ef12db7-d0d6-4859-badc-45113832ebf2
   url: http://ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:80/
 - method: GET
-  name: req-df3af8ab-2fd8-4ad6-a9a5-7465f95005a8
+  name: req-17903ed7-f167-4aa5-ba93-555a0e1b35b8
   url: http://ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:80/health
 - method: GET
   name: baby_yaml
   params:
     apikey: 4420d1918bbcf7686defdf9560b
   url: http://ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:80/apikey
-name: session-2bf84180-8c2b-4f43-b66f-fda615a48a56
+name: session-a0afdb9a-acc2-45b4-ad1b-dae4c7105458
 proxies:
   http: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:45001
   https: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:45001

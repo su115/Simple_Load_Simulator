@@ -1,4 +1,4 @@
-from worker.app.main import WRequest
+from worker.app.WReq import WRequest
 from worker.variables import *
 from worker.tests.create_yaml1 import *
 from worker.tests.create_yaml2 import *
