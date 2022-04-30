@@ -1,14 +1,10 @@
 list_req:
 - data:
-    blue: white
-    yellow: pink
+    green: pink
   headers:
-    pink: yellow
-  name: req-a68aadaf-6b72-4f0d-800d-6f17237be1bb
-  params:
-    black: red
-    brown: brown
-    red: white
+    grey: orange
+  method: GET
+  name: req-23d82f45-37d8-4833-bce9-443381252eed
   url: http://ec2-13-53-212-77.eu-north-1.compute.amazonaws.com
-name: session-1706ba06-8f2b-4190-9675-33f8f3352965
+name: session-6deb3037-bef6-4baf-9bda-b4038d40befc
 proxies: {}
