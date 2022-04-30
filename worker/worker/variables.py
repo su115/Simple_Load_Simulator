@@ -1,7 +1,8 @@
 # Proxy
 proxies_user = "your_dante_user"
 proxies_pass = "EvanescaPassworsd1sr5"
-proxies_ip = 'ec2-13-51-194-209.eu-north-1.compute.amazonaws.com'
+proxies_ip = 'ec2-13-53-212-77.eu-north-1.compute.amazonaws.com'
+#'ec2-13-51-194-209.eu-north-1.compute.amazonaws.com'
 #"ec2-13-51-201-196.eu-north-1.compute.amazonaws.com"
 proxies_port = "45001"
 proxies_protocol = "socks5"
@@ -20,6 +21,8 @@ test_server_url_table = {
                     'http':  f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}',
                     'https': f'{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}',
                 },
+            'timeout': (1,5),
+            'verify': False,
             'locations': [
                 {
                     'location': '/',

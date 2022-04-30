@@ -2,9 +2,16 @@
 import requests
 import validators
 import uuid
-#import copy
 class WRequest:
     cname = "WRequests:"
+    url="http://localhost:80"
+    method="GET"
+    instance=None
+    data=None 
+    headers=None
+    proxies=None
+    params=None
+    name='None'
     #proxies = None   # dict    #proxies = { 'http' : 'https://user:password@proxiesip:port' }
 
     def __init__(self,
@@ -17,11 +24,13 @@ class WRequest:
             params=None,
             name='None',
             ):
-        if name == None or self._is_type(name,str):
-            if name==None:
+
+        # name 
+        if name=='None':
                 self.name='wreq-'+str(uuid.uuid4)
-            else:
+        else:
                 self.name=name
+
         self.prepped = None
         self.headers = self._check_dict(headers,"headers")
         self.data = self._check_dict(data,"data") 
@@ -36,8 +45,10 @@ class WRequest:
         #instance
         if  instance == None or self._is_type(instance, requests.Session): # for testing purposes
             if instance == None:
+                print("New session instance")
                 self.instance = requests.Session() # Checked
             else:
+                print("Custom session instance")
                 self.instance = instance
         else:
             print(type(instance))
@@ -53,18 +64,21 @@ class WRequest:
             self._init_value_error(url,"url")
 
         # instance not None
-        if self.instance == None:
-            raise ValueError("problems with instance.")
+        #if self.instance == None:
+        #    raise ValueError("problems with instance.")
 
     def __del__(self):
-        self.instance.close()
+        if not self.instance == None:
+            print(self.instance,'\t',str(type(self.instance)))
+            self.instance.close() # Double delete :(
+        self.instance = None
         self.data=None
         self.method = None
         self.headers = None
         self.proxies = None
-        self.instance = None
         self.url = None
         self.prepped = None
+
     def _init_value_error(self,value,what):
             raise ValueError(what +" is incorect:" + str(type(value)) + str(value) )
 
@@ -93,23 +107,25 @@ class WRequest:
         return self.prepped
 
     def send(self): # Not checked
-        #if self.prepped == None:
-        self._make_prepped()
+        if self.prepped == None:
+            self._make_prepped()
+        
         answer = self.instance.send(
                 self.prepped,
                 proxies=self.proxies,
+                verify=False, # hard                
+                timeout=(1, 5), # hard (connect, read)
                 )
         return answer
    
     def _check_dict(self, dct, dict_name):
         if dct == None:
             return dct
-
         if not self._is_type(dct,dict):
             value = str(type(dct))
             raise ValueError(self.cname + f'''type of varriable \"{dict_name}\" is {value} ''')
         for key in dct:
-            if not  self._is_type(key,str) and self._is_type(dct[key],str) :
+            if not (  self._is_type(key,str) and  self._is_type(dct[key],str) ):
                     t1 = str(type(key))
                     t2 = str(type(dct[key]))
                     raise ValueError(self.cname+f"""{dict_name} is dict but one of values is not str!!!
