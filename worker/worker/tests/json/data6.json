@@ -1,0 +1,53 @@
+{
+    "ip": "ec2-16-171-12-200.eu-north-1.compute.amazonaws.com",
+    "list_req": [
+        {
+            "expected_status_code": 200,
+            "location": "/"
+        },
+        {
+            "delay": 2.1,
+            "expected_status_code": 200,
+            "expected_text": "health",
+            "location": "/health",
+            "name": "health_httpv2"
+        },
+        {
+            "expected_status_code": 200,
+            "expected_text": "health",
+            "location": "/apikey",
+            "name": "apikey_httpv2",
+            "params": {
+                "apikey": "4420d1918bbcf7686defdf9560b"
+            },
+            "posible_status_code": [
+                200,
+                401,
+                404
+            ]
+        },
+        {
+            "expected_status_code": 301,
+            "location": "/redirect",
+            "method": "GET",
+            "name": "httpv2_redirect"
+        },
+        {
+            "expected_headers": {
+                "my_header": "value"
+            },
+            "expected_status_code": 200,
+            "location": "/addheader",
+            "method": "GET",
+            "name": "httpv2_addheader"
+        }
+    ],
+    "name": "WSession-2",
+    "port": ":444",
+    "protocol": "https",
+    "proxies": {
+        "http": "socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-16-171-12-200.eu-north-1.compute.amazonaws.com:45001",
+        "https": "socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-16-171-12-200.eu-north-1.compute.amazonaws.com:45001"
+    },
+    "verify": false
+}

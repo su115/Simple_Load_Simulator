@@ -1,18 +1,18 @@
-language: python
-os: ubuntu
-arch: amd64
-jobs:
-        include: 
-         - name: "Linux Ubuntu"
-           python: 3.9.0
-           
-           
-install:
-        - pip3 install pipenv
-script:
-        - echo "first step 1!"
-#        - pipenv --three
-        - pipenv install -e ./worker/
-        - pipenv run pytest  ./worker/worker/tests/
-
-                  
+#language: python
+#os: ubuntu
+#arch: amd64
+#jobs:
+#        include: 
+#         - name: "Linux Ubuntu"
+#           python: 3.9.0
+#           
+#           
+#install:
+#        - pip3 install pipenv
+#script:
+#        - echo "first step 1!"
+##        - pipenv --three
+#        - pipenv install -e ./worker/
+#        - pipenv run pytest  ./worker/worker/tests/
+#
+#                  

@@ -1,11 +1,12 @@
 list_req:
 - data:
-    orange: brown
-  name: req-ee6bc0d1-b733-432f-9106-16db1d875993
-  params:
-    white: pink
-  url: http://ec2-13-53-212-77.eu-north-1.compute.amazonaws.com
-name: session-0e850faf-b451-4efa-bb31-c724ad47fe0f
-proxies:
-  http: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:45001
-  https: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:45001
+    green: green
+    orange: black
+  headers:
+    black: green
+    green: black
+  method: GET
+  name: req-b7dfc387-6474-43db-8710-b9e678c84c27
+  url: http://ec2-16-171-12-200.eu-north-1.compute.amazonaws.com
+name: session-71178b7a-962d-43e2-8d90-b0d818c4260d
+proxies: {}

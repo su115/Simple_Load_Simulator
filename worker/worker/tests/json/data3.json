@@ -1,0 +1,12 @@
+{
+    "name": "WSession-3",
+    "protocol": "http",     
+    "ip": "wiki.org",
+    "list_req": [
+        {
+            "location": "/",
+            "name": "req3",
+            "expected_status_code": 202
+        }
+    ]
+}

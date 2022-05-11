@@ -1,0 +1,30 @@
+{
+    "allow_redirects": true,
+    "ip": "ec2-16-171-12-200.eu-north-1.compute.amazonaws.com",
+    "list_req": [
+        {
+            "expected_status_code": 200,
+            "location": "/phealth",
+            "method": "POST",
+            "name": "post_1"
+        },
+        {
+            "expected_status_code": 200,
+            "location": "/predirect1",
+            "method": "POST",
+            "name": "post_redirect"
+        },
+        {
+            "expected_status_code": 200,
+            "location": "/papikey",
+            "method": "POST",
+            "params": {
+                "apikey": "4420d1918bbcf7686defdf9560b"
+            }
+        }
+    ],
+    "name": "WSession-3",
+    "port": ":443",
+    "protocol": "https",
+    "verify": false
+}

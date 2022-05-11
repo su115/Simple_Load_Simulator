@@ -1,7 +1,8 @@
 # Proxy
 proxies_user = "your_dante_user"
 proxies_pass = "EvanescaPassworsd1sr5"
-proxies_ip = "ec2-13-53-212-77.eu-north-1.compute.amazonaws.com"
+proxies_ip = 'ec2-16-171-12-200.eu-north-1.compute.amazonaws.com'
+#"ec2-13-53-212-77.eu-north-1.compute.amazonaws.com"
 #'ec2-13-51-194-209.eu-north-1.compute.amazonaws.com'
 # "ec2-13-51-201-196.eu-north-1.compute.amazonaws.com"
 proxies_port = "45001"
@@ -15,7 +16,7 @@ test_server_params = {
 
 test_server_url = f"http://{proxies_ip}"  # Main url
 test_server_ip = f"{proxies_ip}"
-test_server_url_table = {
+test_server_url_table = { # table 1
     "name": "WSession-1",# None = any
     "port": ":80",
     "protocol": "http",  # http or https
@@ -27,10 +28,10 @@ test_server_url_table = {
         "http": f"{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}",
         "https": f"{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}",
     },
-    "timeout": (1, 5),# timeout of Request
+    "timeout": (10, 20),# timeout of Request
     "verify": False,
     "list_req": [
-        {
+        {#1
             "location": "/",
             "name": None,
             "headers": None,
@@ -42,20 +43,21 @@ test_server_url_table = {
             "expected_text": None, # "health",  # None = any
             "expected_headers": None,
             "delay":2.1 , # delay after request
+            "timeout": [4,6],
         },  # Done
-        {
+        {#2
             "location": "/health",
             "headers": None,
             "params": None,
             "data": None,
-            "name": None,
+            "name": "req-54",
             "method": "GET",
             "posible_status_code": [200, 404],
             "expected_status_code": 200,
             "expected_text": "health",  # None = any
             "expected_headers": None,
         },  # Done
-        {
+        {#3
             "location": "/apikey",
             "name": "baby_yaml",
             "headers": None,

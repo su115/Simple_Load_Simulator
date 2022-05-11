@@ -1,0 +1,11 @@
+{
+    "name": "WSession-4",
+    "protocol": "http",     
+    "list_req": [
+        {
+            "location": "/",
+            "name": "req4",
+            "expected_status_code": 200
+        }
+    ]
+}

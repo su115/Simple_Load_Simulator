@@ -1,0 +1,12 @@
+{
+    "name": "WSession-1",
+    "protocol": "http",     
+    "ip": "wik1i.org",
+    "list_req": [
+        {
+            "location": "/",
+            "name": "req1",
+            "expected_status_code": 200
+        }
+    ]
+}   

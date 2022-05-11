@@ -56,10 +56,10 @@ class WRequest:
             if instance == None:
                 self.instance = requests.Session()  # Checked
             else:
-                print("Custom session instance")
+                #print("Custom session instance")
                 self.instance = instance
         else:
-            print(type(instance))
+            #print(type(instance))
             self._init_value_error(instance, "instance")
         # url
         if self._is_type(url, str) and validators.url(url):
@@ -70,7 +70,7 @@ class WRequest:
         
     def __del__(self):
         if not self.instance == None:
-            print(self.instance, "\t", str(type(self.instance)))
+            #print(self.instance, "\t", str(type(self.instance)))
             self.instance.close()  # Double delete :(
         self.instance = None
         self.data = None
@@ -94,20 +94,35 @@ class WRequest:
         self.prepped = req.prepare()
         return self.prepped
 
-    def send(self,verify=False,timeout=(1,5),proxies=None,allow_redirects=False):  # Not checked
+    def send(   self,
+                verify=False,
+                timeout=(1,5),
+                proxies=None,
+                allow_redirects=False
+                ):  # Not checked
         if self.prepped == None:
             self._make_prepped()
-
+        #print("TIMEOUT:\t",timeout)
         answer = self.instance.send(
             self.prepped,
             proxies=proxies,
             verify=verify,  # hard
-            timeout=timeout,  # hard (connect, read)
+            timeout=tuple(timeout),  # hard (connect, read)
             allow_redirects=allow_redirects,
         )
         if self.delay != 0.0:
             time.sleep(self.delay)
+        self.logs(answer)
         return answer
+    def logs(self,answer):
+        log_msg =f'''{self.method} {answer.status_code} {self.url}'''
+        if self.headers:
+            log_msg += f"headers: {self.headers}"
+        if self.data:
+            log_msg += f"data: {self.data}"
+        if self.params:
+            log_msg += f"params: {self.data}"
+        print(log_msg)
 
     def _is_type(self, value, func):
         if type(value) is func:

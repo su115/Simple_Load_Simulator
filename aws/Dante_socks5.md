@@ -1,4 +1,4 @@
-# (install)[https://www.digitalocean.com/community/tutorials/how-to-set-up-dante-proxy-on-ubuntu-20-04]
+# [install](https://www.digitalocean.com/community/tutorials/how-to-set-up-dante-proxy-on-ubuntu-20-04)
 ```sh
 sudo apt update
 sudo apt install dante-server

@@ -8,3 +8,5 @@ worker/worker.egg-info/
 worker/worker.egg-info/*
 *.crt
 *.key
+.terra*
+*.tfstate

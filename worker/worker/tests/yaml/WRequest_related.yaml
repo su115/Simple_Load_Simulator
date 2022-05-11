@@ -1,16 +1,16 @@
 list_req:
 - method: GET
-  name: req-23e4a60c-c1ff-4e44-9026-d65fcf8e2477
-  url: http://ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:80/
+  name: req-38a4a208-f075-4689-b1d4-bab49c0fd388
+  url: http://ec2-16-171-12-200.eu-north-1.compute.amazonaws.com:80/
 - method: GET
-  name: req-bc29c8ca-a9b3-4779-bd62-bcc4e6bd8c49
-  url: http://ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:80/health
+  name: req-54
+  url: http://ec2-16-171-12-200.eu-north-1.compute.amazonaws.com:80/health
 - method: GET
   name: baby_yaml
   params:
     apikey: 4420d1918bbcf7686defdf9560b
-  url: http://ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:80/apikey
-name: session-f2baffcd-718d-419b-9af9-77356b5ea6e7
+  url: http://ec2-16-171-12-200.eu-north-1.compute.amazonaws.com:80/apikey
+name: session-7756f680-97f0-423d-9071-d340efa7f82b
 proxies:
-  http: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:45001
-  https: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-13-53-212-77.eu-north-1.compute.amazonaws.com:45001
+  http: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-16-171-12-200.eu-north-1.compute.amazonaws.com:45001
+  https: socks5://your_dante_user:EvanescaPassworsd1sr5@ec2-16-171-12-200.eu-north-1.compute.amazonaws.com:45001
