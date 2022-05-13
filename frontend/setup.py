@@ -5,21 +5,19 @@ class BinaryDistribution(Distribution):
     def is_pure(self):
         return False
 
-setup(name="master",
+setup(name="frontend",
         version='0.0.1',
         packages=find_packages(),
         install_requires=[
-            'pytest',
+            #'pytest',
             'requests',
-#            'validators',
-#            'pyyaml',
+            #'validators',
+            #'pyyaml',
             'requests[socks]',
-#            'varname',
-            'urllib3[socks]',
+            #'varname',
+            #'urllib3[socks]',
             'flask',
             'waitress',
-#            'json',
-#            'flask_restful'
             ],
         include_package_data=True,
         distclass=BinaryDistribution,

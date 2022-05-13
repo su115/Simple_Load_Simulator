@@ -18,6 +18,7 @@ setup(name="worker",
             'urllib3[socks]',
             'flask',
             'waitress',
+#            'schedule',
 #            'json',
 #            'flask_restful'
             ],

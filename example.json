@@ -1,0 +1,32 @@
+{
+    "name": "Simulation-1",
+    "repeat": 3,
+    "session": {
+        "ip": "api.agify.io",
+        "list_req": [
+            {
+                "delay": 0.1,
+                "expected_status_code": 200,
+                "expected_text": "{\"name\":\"bella\",\"age\":35,\"count\":40138}",
+                "location": "/",
+                "method": "GET",
+                "params": {
+                    "name": "bella"
+                },
+                "timeout": [
+                    4,
+                    6
+                ]
+            }
+        ],
+        "name": "Session-1",
+        "port": ":443",
+        "protocol": "https",
+        "timeout": [
+            1,
+            5
+        ],
+        "verify": true
+    }
+}
+

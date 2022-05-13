@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>Simple Load Simulator</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/my_style.css') }}">
+</head>
+<body>
+    <div class=wrapper>
+        <div class=main_content>
+            <h1>Simple Load Simulator</h1>
+            <p>Paste here your json configuration, and click start. Simple Load Simulator will check syntax and if syntax is valid you can start loading your server.</p>       
+            <form action="{{ url_for('home') }}"  accept-charset="UTF-8"  method="POST"  class="form">
+            {% if error %}
+                <h3> {{ error['message'] }}</h3>
+            {% else %}
+                <textarea rows="rows" cols="cols" name="input_form" class=textarea></textarea>
+            {% endif %}
+             <div class=button_container>
+            {% if not error %}
+                <button id="validB" class="button" type="submit" formaction="{{ url_for('validate') }}" >                        
+                        Valid
+                </button>
+                <button id="startB" class="button" type="submit"  formaction="{{ url_for('start')    }}" >
+                        Start
+                </button>
+            {% else %}
+                <button onclick="history.back()" class="button">Go Back</button>
+                <div id="divCheckbox" style="display: none;"></div>
+            {% endif %}
+            </div>
+            </form>
+
+        </div>
+    <div>
+</body>
+</html>

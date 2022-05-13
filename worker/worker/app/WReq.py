@@ -80,7 +80,7 @@ class WRequest:
         self.prepped = None
 
     def _init_value_error(self, value, what):
-        raise ValueError(what + " is incorect:" + str(type(value)) + str(value))
+        raise ValueError(what + " is incorect:" + str(type(value)) + str(value),403)
 
     def _make_prepped(self):  # Not checked
         req = requests.Request(
@@ -95,10 +95,10 @@ class WRequest:
         return self.prepped
 
     def send(   self,
-                verify=False,
-                timeout=(1,5),
-                proxies=None,
-                allow_redirects=False
+                verify:bool=False,
+                timeout:tuple[int]=(1,5),
+                proxies:dict[str]=None,
+                allow_redirects:bool=False
                 ):  # Not checked
         if self.prepped == None:
             self._make_prepped()
@@ -121,7 +121,7 @@ class WRequest:
         if self.data:
             log_msg += f"data: {self.data}"
         if self.params:
-            log_msg += f"params: {self.data}"
+            log_msg += f"params: {self.params}"
         print(log_msg)
 
     def _is_type(self, value, func):

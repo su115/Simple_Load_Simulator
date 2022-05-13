@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sls-worker-deploy
+  labels:
+    app: sls_worker_deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sls_worker_pod
+  template:
+    metadata:
+      labels:
+        app: sls_worker_pod
+    spec:
+      containers:
+      - name: worker
+        image: 125111317/simple_load_simulator:worker-1.0.4
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_PORT
+          value: "7799"
+        - name: MASTER_IP
+          value: "sls-master-service"
+        - name: MASTER_PORT
+          value: "7790"
+        - name: PYTHONUNBUFFERED
+          value: "1" # solve 'kubectl log problems'
+#        resources:
+#          limits:
+#           cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 7799
+
+        ports:
+        - containerPort: 7799
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sls-worker-service
+spec:
+  selector:
+    app: sls_worker_pod
+  ports:
+    - protocol: TCP
+      port: 7799
+      targetPort: 7799

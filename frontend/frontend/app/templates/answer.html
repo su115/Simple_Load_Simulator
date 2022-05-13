@@ -1,0 +1,51 @@
+<html>
+<head>
+    <title>Simple Load Simulator</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/my_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/my_answer.css') }}">
+</head>
+<body>
+    <div class=wrapper>
+        <div class=main_content>
+            <h1>Simple Load Simulator</h1>
+            <p>Here you can see answer of you query.</p> 
+            <div >
+             <div class=answer_container>
+                    <p class=simulation_name >{{ name }}<p>
+                    {% for session in sessions %}
+                        <div class=session>
+                            <p class=session_name >{{ session[0] }}</p>
+                            <div class=request_container>
+                                <p class=request_name>{{ session[1]['name'] }}</p>
+                                {% if session[1]['error'] %}
+                                    <div class=error>
+                                         {{ session[1]['error'] }}</div>
+                                {% else %}
+                                    <div class=ok>
+                                        ok
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                        </div>
+
+                    {% endfor %} 
+            </div>
+             <div class=button_container>
+                <form method="get" action="{{ url_for('home') }}">
+                    <button onclick="history.back()" class="button">
+                            Back
+                    </button>
+                </form>
+                <button id="startB" class="none" type="submit" > 
+                        Start
+                </button>
+            </div>
+            </div>
+
+        </div>
+    <div>
+</body>
+</html>
+

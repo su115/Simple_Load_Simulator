@@ -6,10 +6,10 @@ import uuid, requests
 
 class WSession:
     def __init__(self, block):
-        # INPUT
+        # INPUT 
         # block is dict
         # required fields:
-        #   'name'
+        #   'name'-> not
         #   'ip'
         #   'list_req'
         #       'location'
@@ -17,8 +17,30 @@ class WSession:
         #       
         # OUTPUT
         # list_resaults
-        self._check_reqired_params(block)
-        self.name = block["name"]
+
+
+
+        self._check_reqired_params(block) # mandatory params
+        #   'name' -> not mandatory
+        #   'ip'
+        #   'list_req'
+        #       'location'
+        #       'expected_status_code'
+        #       'name' 
+        
+        # another
+        #       'expected_text'
+        #       'possible_status_code'
+        #       'expected_headers'
+        self.is_valid(block) #check additional params
+        #   'port'
+        #   'protocol'
+        #   'timeout'
+        #   'verify'
+        #   'ip'
+
+
+        self.name = block["name"] if 'name' in block else "Session-"+ str( uuid.uuid4() )[:8]
         self.port = block["port"] if 'port' in block else ''
         self.protocol = block["protocol"] if 'protocol' in block else 'http'# 'http' or 'https'
         self.ip = block["ip"]                                               # ip or dnsname required
@@ -31,7 +53,7 @@ class WSession:
         self.list_wreq = []  # block['list_req']
         self.dict_creq = {}
         self.list_resaults = []  # here we save resaults
-       # self.list_resaults.append(self.name)
+        self.list_resaults.append(self.name)
         for req in block["list_req"]:
             if "name" in req: ### if name exists in yaml
                 cname = req['name']
@@ -71,6 +93,57 @@ class WSession:
             )
             self.list_wreq.append(wreq)
             self.dict_creq[cname] = creq
+    
+    def is_valid(self,block):
+        err = "Error: WSession: is_valid: "
+        # port
+        # protocol
+        # timeout
+        # verify
+        # ip <-- str
+        
+        protocols = ['https','http']
+        #check port        
+        if 'port' in block:
+            if not isinstance(block['port'],str):
+                    raise Exception(err + f"parameter 'port' is '{block['port']}' but you need for example ':443' or ':80' or empty '' ",422)
+            if  block['port'] == "" :
+                pass
+            elif  block['port'][0] == ':':
+                if  block['port'][1:].isdigit():
+                    pass
+                else:
+                    raise Exception(err + f"parameter 'port' is '{block['port']}' but you need for example ':443' or ':80' or delete this param.",422)
+            else:
+                raise Exception(err + f"parameter 'port' is '{block['port']}' but you need for example ':443' or ':80' or delete this param.",422)
+        # check protocol
+        if 'protocol' in block:
+            if not isinstance(block['protocol'],str):
+                raise Exception(err + f"parameter 'protocol' is '{block['protocol']}' but you need 'http' or 'https'.",422) 
+            if not block['protocol'] in protocols:
+                raise Exception(err + f"parameter 'protocol' is '{block['protocol']}' but you need 'http' or 'https'.",422)
+        # timeout
+        if 'timeout' in block:
+            if   isinstance(block['timeout'],tuple) or  isinstance(block['timeout'], list):
+                if len(block['timeout']) == 2:
+                    if isinstance(block['timeout'][0],int) and isinstance(block['timeout'][1],int):
+                        pass
+                    else:
+                        raise Exception(err + f"parameter 'timeout' is '{block['timeout']}' but you need for example '(1,2)' or '[1,2]'.",422)
+                else:
+                    raise Exception(err + f"parameter 'timeout' is '{block['timeout']}' but you need for example '(1,2)' or '[1,2]'.",422)
+            else:
+                raise Exception(err + f"parameter 'timeout' is '{block['timeout']}' but you need for example '(1,2)' or '[1,2]'.",422)
+        # verify 
+        if 'verify' in block:
+            if not isinstance(block['verify'],bool):
+                print("check 'verify'", block['verify'])
+                raise Exception(err + f"parameter 'verify' is '{block['verify']}' but you need for example 'true' or 'false'",422)
+        # ip
+        if 'ip' in block:
+            if not isinstance(block['ip'],str):
+                raise Exception(err + f"parameter 'ip' is '{block['ip']}' but you need for example '192.168.0.2' or dnsname 'wiki.org'.",422)
+
 
     def send(self):
         for wreq in self.list_wreq:
@@ -100,7 +173,7 @@ class WSession:
     def check_resault(self, wreq, answer):
         resault = self._create_error(wreq)
         #resault["error"] = []
-
+        error = "Error: WSession: check_resault: "
         # GET names
         cname = wreq.name # .replace("-wreq-", "-creq-")
         #print("check_resaults:")
@@ -158,13 +231,12 @@ class WSession:
         # INPUT
         # block is dict
         # required fields:
-        #   'name'
         #   'ip'
         #   'list_req'
         #       'location'
         #       'expected_status_code'
         #       'name'                  #uniq !!!! or generated!!!
-        req_main = ['name', 'ip', 'list_req']
+        req_main = [ 'ip', 'list_req']
         req_list_req = ['expected_status_code','location']
         for param in req_main:
             if not param in block:
@@ -193,8 +265,19 @@ class WSession:
                         names += str(re['name']) if 'name' in re else "None"
                         names += ' '
                     err += names
-                    self._print_error_position('Error dublicate!!!', err)
+                    self._print_error_position('Error: dublicate!!!', err)
                     code = 422
                     raise Exception(err,code)
         
+
+
+
+
+
+
+
+
+
+
+
 

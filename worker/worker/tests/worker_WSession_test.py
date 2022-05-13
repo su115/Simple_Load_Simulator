@@ -77,6 +77,7 @@ def test_WSession_send3():
         assert True
     except:
         assert False
+
 # test send 4 requests.exceptions.ConnectionError
 @pytest.mark.testclass
 def test_WSession_send1_ConnectionError():
@@ -85,12 +86,14 @@ def test_WSession_send1_ConnectionError():
     block['list_req'].append(test_server_url_table['list_req'][0])
     
     block['ip'] = 'llll.oew'
-    #print('Block before test',block)
+    print('Block before test',block)
     try:
         wses = WSession(block)
         wses.send()
         for req in wses.list_resaults: # list of resaults
-            #print('req:',req['error'])
+            #print('req:',req)
+            if isinstance(req,str):
+                continue
             if not req['error']: # req['error'] != []
                 assert False
             else:

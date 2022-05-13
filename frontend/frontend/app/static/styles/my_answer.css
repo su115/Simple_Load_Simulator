@@ -1,0 +1,53 @@
+.answer_container {
+    
+
+}
+.answer_container{
+/*    padding: 10px;*/
+    background-color: #A8E0FF;
+    border: solid;
+    border-color: #3E517A;
+}
+.simulation_name{
+    font-size: 22px;
+    padding: 3px;
+}
+.session{
+    margin-left: 5px;
+/*    padding: 3px;*/
+    border: solid;
+    border-color: #3E517A;
+    background-color: #1F376A;
+    color: white;
+    margin: 10px;
+}
+.session_name{
+    padding: 3px;
+}
+.request_container{
+    background-color: #541F6A;
+    padding: 1px;
+    font-size: 16px;
+    font-family: arial;
+    
+}
+.request_name{
+    padding: 2px;
+    margin-left: 1px
+}
+.ok{
+    background-color: green;
+    /*border: solid;
+    border-color: #3E517A;
+    margin-left:1px;*/
+    padding: 5px;
+    padding-left: 10px;
+}
+.error{
+    background-color: red;
+    padding: 5px;
+    padding-left: 10px;
+/*    border: solid;
+    border-color: #3E517A;
+    margin-left: 1px;/*/
+}

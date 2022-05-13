@@ -10,3 +10,4 @@ worker/worker.egg-info/*
 *.key
 .terra*
 *.tfstate
+**/*.egg-info/

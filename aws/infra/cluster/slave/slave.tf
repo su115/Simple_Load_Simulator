@@ -6,6 +6,10 @@ resource "aws_instance" "slave"{
   count = 2
   key_name = local.ssh_key_id
   subnet_id=local.private1_id
+  root_block_device {
+      tags                  = {}
+      volume_size           = 20
+  }
   tags = {
     Name = "Ubuntu-slave-${count.index}"
   }
