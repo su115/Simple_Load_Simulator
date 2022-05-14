@@ -39,7 +39,7 @@ class WSession:
         #   'verify'
         #   'ip'
 
-
+        self._check_bad_params(block)
         self.name = block["name"] if 'name' in block else "Session-"+ str( uuid.uuid4() )[:8]
         self.port = block["port"] if 'port' in block else ''
         self.protocol = block["protocol"] if 'protocol' in block else 'http'# 'http' or 'https'
@@ -248,7 +248,7 @@ class WSession:
         for param in req_list_req:
             for req in block["list_req"]:
                 if not param in req:
-                    err= f"Error: reqired \"{param}\" is not exist in block['list_req']:{req}"
+                    err= f"Error: reqired '{param}' is not exist in block['list_req']:{req}"
                     self._print_error_position('missing reqired arg!!!',err)
                     #print(err)
                     code = 422
@@ -259,7 +259,7 @@ class WSession:
                 if not req['name'] in list_name:
                     list_name.append(req['name'])
                 else:
-                    err = f"Error: found dublicate of uniq field \"name\":"
+                    err = f"Error: found dublicate of uniq field 'name:"
                     names = ' '
                     for re in block['list_req']:
                         names += str(re['name']) if 'name' in re else "None"
@@ -270,6 +270,53 @@ class WSession:
                     raise Exception(err,code)
         
 
+
+
+    def _check_bad_params(self,block):
+        # INPUT
+        # block is dict
+        # fields:
+        #   'name'
+        #   'protocol'
+        #   'port'
+        #   'ip'
+        #   'timeout'
+        #   'proxies'
+        #   'verify'
+        #   'allow_redirects'
+        #   'list_req'
+        #       'location'
+        #       'method'
+        #       'data'
+        #       'headers'
+        #       'params'
+        #       'posible_status_code'
+        #       'expected_text'
+        #       'expected_headers'
+        #       'expected_status_code'
+        #       'delay'
+        #       'name'                  #uniq !!!! or generated!!!
+        req_main = [ 'name','protocol','port','ip','timeout','proxies','verify','allow_redirects', 'list_req',]
+        req_list_req = ['expected_status_code','location','method','data','headers','params','posible_status_code','expected_text','expected_headers','delay','name']
+
+        
+        for param in block:
+            if not param in req_main:
+#                print("BLOCK is:",block)
+                err=  f"Error: Session got unexpected param: '{param}'."
+                #self._print_error_position('missing reqired arg!!!',err)
+                code = 422
+                print(err)
+                raise Exception(err,code)
+#        print('block["list_req"]:',str(type(block['list_req'])),'\n\nlist:\t', block['list_req'])
+        for dictionary in block['list_req']:
+            for param in dictionary:
+                if not param in req_list_req:
+                    err= f"Error: Session got unexpected param: '{param}' in 'list_req'."
+                    #self._print_error_position('missing reqired arg!!!',err)
+                    print(err)
+                    code = 422
+                    raise Exception(err,code)
 
 
 

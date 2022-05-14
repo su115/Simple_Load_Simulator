@@ -1,0 +1,24 @@
+{        
+        "ip": "api.agify.io",
+        "list_req": [
+            {
+                "delay": 0.1,
+                "expected_status_code": 200,
+                "expected_text": "{\"name\":\"bella\",\"age\":35,\"count\":40138}",
+                "location": "/",
+                "params": {
+                    "name": "bella"
+                }
+            },
+            {
+                "delay": 0.1,
+                "expected_status_code": 202,
+                "expected_text": "{\"name\":\"bella\",\"age\":35,\"count\":40138}",
+                "location": "/",
+                "params": {
+                    "name": "bella"
+                }
+            }
+          
+        ]
+}

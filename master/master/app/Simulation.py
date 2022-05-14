@@ -1,7 +1,8 @@
 from  master.app.Worker import Worker
-import random, copy, uuid
+import random, copy, uuid, time
 import multiprocessing
-
+#from multiprocessing.managers import BaseProxy
+from multiprocessing.dummy import Pool
 class Simulation:
     def __init__(self, 
                  block,
@@ -14,6 +15,7 @@ class Simulation:
         
 
         err = "Error: Simulation: __init__: "
+        self._check_bad_params(block)
         # NAME
         if "name" in block:
             if isinstance(block['name'] , str):
@@ -67,7 +69,31 @@ class Simulation:
             self.threads = 1
 #            raise Exception(err+"parameter 'threads' isn't exists.")
 
-       
+        # detached
+        if 'detached' in block:
+            if isinstance( block['detached'],bool ): # when you use detached 
+                                                     # you must be sure that "session": 
+                                                     #                          "list_req":
+                                                     #                              "delay": 0.1, <-- is at list 0.1
+                #print("check detached 1")
+                if 'list_req' in  self.session:
+                    
+                    for req in self.session['list_req']:
+                        if not 'delay' in req:
+                            raise Exception(err +" 'detached' is used but 'session'->'list_req'->'delay' is not used in every req.")
+                        else:
+                            if req['delay'] >= 0.1 and req['delay'] <= 15.0:
+                                pass # match all expression
+                            else:
+                                raise Exception(err +" 'detached' is used but 'session'->'list_req'->'delay' is not in diapazone: 0.1 <= 'delay' <= 15.0 ")
+                else:
+                    raise Exception(err +" 'detached' is used but 'session'->'list_req' isn't exists.")
+                self.detached = block['detached']
+            else:
+                self.detached = False
+                raise Exception(err + "parameter 'detached' isn't type 'bool'.")
+        else:
+            self.detached = False 
 
     def _set_workers(self,workers):
         err = "Error: Simulation: set_workers: "
@@ -91,42 +117,101 @@ class Simulation:
         if not  self.workers: # if empty !!!!
             raise Exception(err+ "Worker list is empty!!! None of registred worker!!!\n"+unavailible_workers)
             
-        
-    def start(self): # start work
-        err = 'Error: Simulation: start: '
-        if not ( self.threads >= 1 and  self.threads <= 10):
-            raise Exception(err+f"parameter 'threads' out of the range. must be 1 <= 'threads' <= 10, but it was {self.threads}.")
-        resaults = []
-#        print("start simulation: ",self.name)
-        procs = []
-        
-
-        def _proc(job,resa,worker,msg):
+    # _check_bad_params
+    def _check_bad_params(self,block):
+    #   'name'
+    #   'session'
+    #   'threads'
+    #   'repeat'
+    #   'detached'
+        sim_params = ['name','session','threads','repeat','detached']    
+        for param in block:
+            if not param in sim_params:
+                err= f"Error: Simulation got unexpected param: '{param}'."
+#                logging.error(err)
+#                print(err)
+                raise Exception(err)
+############################################# START ##############################################
+    def _proc(  self,
+                job,
+                resa,
+                worker,
+                msg,
+                time_l,
+                ):
+            def timed():
+                    t = time.localtime()
+                    current_time = time.strftime("%H:%M:%S", t)
+                    return str(current_time)
             for i in range(self.repeat):
                  tmp_session = copy.deepcopy(self.session)
                  if 'name' in self.session:
                      tmp_session['name'] = self.session['name'] + '-threads-'+str(job)+ f'-repeat-{i + 1}'
                  else:
                     tmp_session['name'] = 'Session-'+str( uuid.uuid4() )[:8] + '-threads-'+str(job)+ f'-repeat-{i+1}'
-                 #worker = random.choice(self.workers)
-                 
-                 resa.append( worker.work(tmp_session) )
-#                 print(msg) #debug only
+                 resault  = worker.work(tmp_session) # work !!!!
+                 is_ok = 0
+                 not_ok = 0
+                 #[
+                 #   "Session-319ade9a",
+                 #    {
+                 #     "error":["expected_status_code: 200 answer_status_code: 301"],
+                 #     "name":"Session-319ade9a-request-496806"
+                 #    }
+                 #]
+                 for req in resault:
+                    if isinstance(req,str): # skip Session-319ade9a
+                        continue
+                    if req['error']: #empty
+                        is_ok += 1
+                    else:
+                        not_ok+= 1
+                 resa.append( resault ) # We need take count OK and NOTOK
+                 time_l.append(   [ timed(), is_ok, not_ok ]   )
 
+
+
+#    def start_detach(self,T):
+#        #
+#        pool = Pool(self.threads)
+#        futures = []
+#        for job in range(self.threads):
+##            futures.append(pool.apply_async(  ) )
+#            pass
+#        for future in futures:
+#            #future.get()
+#            pass
+
+    def start(self,T ): # start work
+        err = 'Error: Simulation: start: '
+        if not isinstance(T, list):
+            raise Exception(err+ " param 'T' is not type 'list'.") 
+        resaults = []
+        procs = []
         with multiprocessing.Manager() as manager:
-                L = manager.list()  # <-- can be shared between processes.                
+                L = manager.list()  # <-- can be shared between processes.
+                time_list = manager.list()   # timestamps 
                 for job in range(self.threads ):
                     num =  job+1
                     worker = random.choice(self.workers)
                     msg = "Work:"+str(job+1)+'/'+str(self.threads)+f' {worker.pod_name}' 
-                    p = multiprocessing.Process(target=_proc,args=(num,L,worker,msg))
-                    #_proc(job+1)     
+                    p = multiprocessing.Process(target=self._proc,args=(num,L,worker,msg,time_list))
                     procs.append(p)
                     p.start()
-    
+                #if not self.detached:
                 for proc in procs:
                     proc.join()
                 resaults = list(L)
+
+                #if simulation exists in list
+                notexist = True
+                for simulation in T:
+                    if self.name in  simulation:    #exist
+                        simulation[self.name] += list( time_list )
+                        notexist = False            # to prevent appending this simulation
+                if notexist:
+                    T.append( { self.name: list( time_list ) }  ) #append new simulation
         resaults.append(self.name) # add name of Simulation
+        
         return resaults
 

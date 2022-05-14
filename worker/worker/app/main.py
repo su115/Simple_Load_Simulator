@@ -79,6 +79,7 @@ def register_worker():  # register to master
 
 @app.route("/worker", methods=["POST"])
 def post_data():
+    err = "Error: worker->main.py post_data: "
     block = request.json
 
     try:
@@ -86,8 +87,11 @@ def post_data():
         #wses.is_valid(block)
         wses.send()
     except Exception as e:
-        print(f'/worker got problems!!! args: {e.args}')
-        logging.error(e.args[0])
+#        print(f'/worker got problems!!! args: {e.args}')
+        t = now()
+        info =f'[{t}] ' + err + f"Exception: {e}"
+        print(info)
+        logging.error(info)
         return  jsonify(e.args[0]), e.args[1]
     #    print("/worker works fine")
     return jsonify(wses.list_resaults)
@@ -95,6 +99,7 @@ def post_data():
 
 @app.route("/is_valid_block", methods=["POST"])
 def is_valid():
+    err = "Error: worker->main.py is_valid: "
     block = request.json
     try:
 #        print('before WSession init')
@@ -102,10 +107,13 @@ def is_valid():
         wses.is_valid(block)
 #        print('after WSession init')
     except Exception as e:
-        print(f"/worker say isn't valid: {e.args}")
-        
+ #       print(f"/worker say isn't valid: {e.args}")
+        t = now()
+        info =f'[{t}] ' + err + f"Exception: {e}"
+        print(info)
+        logging.error(info)       
         return jsonify(e.args[0]), e.args[1] #check please
-    print('/worker say is valid')
+#    print('/worker say is valid')
     return "valid"
 
 

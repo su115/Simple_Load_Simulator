@@ -1,5 +1,5 @@
 # SLS Simple Load Simulator
-### Pipeline: 26
+### Pipeline: 27
 #### curl  -H "Content-Type: application/json"  -X POST --data @data.json http://localhost:5000/worker <- worker
 #### sudo docker run --name worker --net=bridge -d worker:1.0.2
 #### sudo docker inspect worker | grep IPAddress

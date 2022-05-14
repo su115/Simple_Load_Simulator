@@ -27,21 +27,29 @@ if MASTER_PORT == None or MASTER_IP==None:
 def home():
     return render_template("index.html", error=False)
 
+def is_valid(url,headers,data):
+        req = requests.post(url=url+'validate',headers=headers, data=data )
+        if req.status_code == 200:
+            if req.text == 'valid':
+                return True
+        return False
+
 @app.route('/validate',methods=['POST'])
 def validate():
     data = request.form.get('input_form')
     if data == '': 
         return redirect(url_for('home'), code=302)
     headers = {"Content-Type": "application/json"}
-    url = f'http://{MASTER_IP}:{MASTER_PORT}/validate'
+    url = f'http://{MASTER_IP}:{MASTER_PORT}/'
+    
     try: 
         json_data = json.loads(data) # check if json syntax is OK
         json_data = json.dumps(json_data) # pack json to str  
-        req = requests.post(url=url,headers=headers, data=json_data )
-        print(f"Validation: req.status_code: {req.status_code} {req.text}")
+        req = requests.post(url=url+'validate',headers=headers, data=json_data )
+        #print(f"Validation: req.status_code: {req.status_code} {req.text}")
         if req.status_code == 200:
             if req.text == 'valid':
-                print("Validate")
+                #print("Validate")
                 mesg = {}
                 mesg['message'] = 'Code is valid!'
                 return render_template('index.html',error=mesg)
@@ -73,26 +81,35 @@ def validate():
 
 @app.route('/start',methods=['POST'])
 def start():
-#    print(data)
+    err = "Error: main.py--> start: "
     data = request.form.get('input_form')
     if data == '': 
         return redirect(url_for('home'), code=302)
+
     headers = {"Content-Type": "application/json"}
-    url = f'http://{MASTER_IP}:{MASTER_PORT}/master'
+    url = f'http://{MASTER_IP}:{MASTER_PORT}/' # we need validate too
+        
     try:
+
         json_data = json.loads(data) # check json
         json_data = json.dumps(json_data)
-        req = requests.post(url=url,headers=headers, data=json_data )
-        print("req status_code",req.status_code)
-        print("req text",req.text)
+        if not is_valid(url=url,headers=headers,data=json_data):
+            raise Exception("please check if syntax is ok!")
+        req = requests.post(url=url+'master',headers=headers, data=json_data )
+        #print("req status_code",req.status_code)
+        #print("req text",req.text)
         if req.status_code == 200:
             block = json.loads(req.text)
-            print(block)
+            #print(block)
             if not 'Error:' in block:
                 
                 #block = block[0]
-                name = block.pop() #last is list is name of Simulation    
-                return render_template('answer.html', name=name,sessions=block)
+                name = block.pop() #last is list is name of Simulation   
+                #print("Simulation name:", name)
+                block = block[0]
+                #print(block) 
+                
+                return render_template('answer.html', name=name,session_name=block[0],sessions=block[1:])
             else:
                 return block
         else:
@@ -109,6 +126,11 @@ def start():
         print(info)
         logging.error(info)
         return render_template('index.html',error={'message':info})
-
+    except Exception as e:
+        t = now()
+        info = f"[{t}] {err}Something is wrong! {e}"
+        print(info)
+        logging.error(info)
+        return render_template('index.html',error={'message':info})
 if __name__ == '__main__':
     app.run('0.0.0.0',debug=True)

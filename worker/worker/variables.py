@@ -43,7 +43,7 @@ test_server_url_table = { # table 1
             "expected_text": None, # "health",  # None = any
             "expected_headers": None,
             "delay":2.1 , # delay after request
-            "timeout": [4,6],
+#            "timeout": [4,6],
         },  # Done
         {#2
             "location": "/health",

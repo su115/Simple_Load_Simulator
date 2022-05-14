@@ -15,12 +15,12 @@
                     <p class=simulation_name >{{ name }}<p>
                     {% for session in sessions %}
                         <div class=session>
-                            <p class=session_name >{{ session[0] }}</p>
+                            <p class=session_name >{{ session_name }}</p>
                             <div class=request_container>
-                                <p class=request_name>{{ session[1]['name'] }}</p>
-                                {% if session[1]['error'] %}
+                                <p class=request_name>{{ session['name'] }}</p>
+                                {% if session['error'] %}
                                     <div class=error>
-                                         {{ session[1]['error'] }}</div>
+                                         {{ session['error'] }}</div>
                                 {% else %}
                                     <div class=ok>
                                         ok

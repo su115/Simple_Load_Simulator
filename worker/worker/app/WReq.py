@@ -25,6 +25,7 @@ class WRequest:
         name: str="None",
         delay:float=0.0,
     ):
+        
         self.delay  =  delay
         # name
         if name == "None":
@@ -76,6 +77,7 @@ class WRequest:
         self.data = None
         self.method = None
         self.headers = None
+        self.params = None
         self.url = None
         self.prepped = None
 
