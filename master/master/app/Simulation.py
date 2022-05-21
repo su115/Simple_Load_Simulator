@@ -1,8 +1,11 @@
 from  master.app.Worker import Worker
 import random, copy, uuid, time
 import multiprocessing
-#from multiprocessing.managers import BaseProxy
+from master.app.Report import Timestamp, Timereport
+from multiprocessing.managers import BaseProxy
 from multiprocessing.dummy import Pool
+
+
 class Simulation:
     def __init__(self, 
                  block,
@@ -167,50 +170,39 @@ class Simulation:
                     else:
                         not_ok+= 1
                  resa.append( resault ) # We need take count OK and NOTOK
-                 time_l.append(   [ timed(), is_ok, not_ok ]   )
+                 time_l.append(  Timereport( name=tmp_session['name'],l_timestamps= [Timestamp(timed(), is_ok, not_ok) ]  )) 
 
-
-
-#    def start_detach(self,T):
-#        #
-#        pool = Pool(self.threads)
-#        futures = []
-#        for job in range(self.threads):
-##            futures.append(pool.apply_async(  ) )
-#            pass
-#        for future in futures:
-#            #future.get()
-#            pass
 
     def start(self,T ): # start work
         err = 'Error: Simulation: start: '
-        if not isinstance(T, list):
+        if not isinstance(T, BaseProxy):
             raise Exception(err+ " param 'T' is not type 'list'.") 
         resaults = []
         procs = []
         with multiprocessing.Manager() as manager:
                 L = manager.list()  # <-- can be shared between processes.
                 time_list = manager.list()   # timestamps 
+                if  self.detached:
+                    pool = Pool( self.threads ) # <-- !!!!!
+                    l_p = []
                 for job in range(self.threads ):
                     num =  job+1
                     worker = random.choice(self.workers)
                     msg = "Work:"+str(job+1)+'/'+str(self.threads)+f' {worker.pod_name}' 
-                    p = multiprocessing.Process(target=self._proc,args=(num,L,worker,msg,time_list))
-                    procs.append(p)
-                    p.start()
+                    
+                    if self.detached:
+                        pool.apply_async(self._proc, args=(num,L,worker,msg,T)) 
+                    else:
+                        p = multiprocessing.Process(target=self._proc,args=(num,L,worker,msg,T))
+                        procs.append(p)
+                        p.start()
+                if self.detached:
+                    return False
                 #if not self.detached:
                 for proc in procs:
                     proc.join()
                 resaults = list(L)
 
-                #if simulation exists in list
-                notexist = True
-                for simulation in T:
-                    if self.name in  simulation:    #exist
-                        simulation[self.name] += list( time_list )
-                        notexist = False            # to prevent appending this simulation
-                if notexist:
-                    T.append( { self.name: list( time_list ) }  ) #append new simulation
         resaults.append(self.name) # add name of Simulation
         
         return resaults

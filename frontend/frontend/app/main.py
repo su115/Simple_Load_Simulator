@@ -4,8 +4,9 @@ import os
 import logging
 import time
 import json
-
+from waitress import serve
 def now():
+
     t = time.localtime()
     current_time = time.strftime("%H:%M:%S", t)
     return str(current_time)
@@ -94,21 +95,19 @@ def start():
         json_data = json.loads(data) # check json
         json_data = json.dumps(json_data)
         if not is_valid(url=url,headers=headers,data=json_data):
-            raise Exception("please check if syntax is ok!")
+            raise Exception("please check if syntax is ok!"
+        )
         req = requests.post(url=url+'master',headers=headers, data=json_data )
-        #print("req status_code",req.status_code)
-        #print("req text",req.text)
+        print("req status_code",req.status_code)
+        print("req text",req.text)
         if req.status_code == 200:
             block = json.loads(req.text)
-            #print(block)
+            if block == False:
+                print("Detached")
+                return render_template("index.html",error={'message':"Detached process works!"})
             if not 'Error:' in block:
-                
-                #block = block[0]
                 name = block.pop() #last is list is name of Simulation   
-                #print("Simulation name:", name)
                 block = block[0]
-                #print(block) 
-                
                 return render_template('answer.html', name=name,session_name=block[0],sessions=block[1:])
             else:
                 return block
@@ -132,5 +131,11 @@ def start():
         print(info)
         logging.error(info)
         return render_template('index.html',error={'message':info})
+
+@app.route("/healthz", methods=["GET"])  # check if server works
+def healthz():
+    #    print("I'm healthz!!!")
+    return "healthz"
 if __name__ == '__main__':
-    app.run('0.0.0.0',debug=True)
+   # app.run('0.0.0.0',debug=True)
+    serve(app,port=5000)

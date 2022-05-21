@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sls-frontend-deploy
+  labels:
+    app: sls_frontend_deploy
+    version: 1.0.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sls_frontend_pod
+  template:
+    metadata:
+      labels:
+        app: sls_frontend_pod
+        version: 1.0.0
+    spec:
+      containers:
+      - name: frontend
+        image: 125111317/simple_load_simulator:frontend-1.0.0
+        env:
+        - name: POD_PORT
+          value: "5000"
+        - name: MASTER_IP
+          value: "sls-master-service"
+        - name: MASTER_PORT
+          value: "7790"
+        - name: PYTHONUNBUFFERED
+          value: "1" # solve 'kubectl log problems'
+#        resources:
+#          limits:
+#           cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 5000
+
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sls-frontend-service
+spec:
+  selector:
+    app: sls_frontend_pod
+  type: NodePort
+  ports:
+    - name: http-fronted
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30500

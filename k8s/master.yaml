@@ -4,6 +4,7 @@ metadata:
   name: sls-master-deploy
   labels:
     app: sls_master_deploy
+    version: 1.0.2
 spec:
   replicas: 1
   selector:
@@ -13,10 +14,11 @@ spec:
     metadata:
       labels:
         app: sls_master_pod
+        version: 1.0.2
     spec:
       containers:
       - name: master
-        image: 125111317/simple_load_simulator:master-1.0.1
+        image: 125111317/simple_load_simulator:master-1.0.2
         resources:
           limits:
 
@@ -39,6 +41,7 @@ spec:
   selector:
     app: sls_master_pod
   ports:
-    - protocol: TCP
+    - name: http-master
+      protocol: TCP
       port: 7790
       targetPort: 7790
