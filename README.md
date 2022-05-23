@@ -1,5 +1,5 @@
 # SLS Simple Load Simulator
-### Pipeline: 28
+### Pipeline: 29
 #### curl  -H "Content-Type: application/json"  -X POST --data @data.json http://localhost:5000/worker <- worker
 #### sudo docker run --name worker --net=bridge -d worker:1.0.2
 #### sudo docker inspect worker | grep IPAddress
@@ -8,6 +8,9 @@
 54.75.10.110
 #### ssh -i cred/id_rsa -fNL 6443:$(MASTER1_IP):6443 debian@$(EXTERNAL_IP)
 #### ssh  -fNL 6443:10.0.20.100:6443 ubuntu@34.245.191.132
+
+# firefox 
+###ssh  -f -N -D 5555 ubuntu@34.252.24.16
 #### sudo docker run --name inf -d -t inf
 #### sudo docker exec -it inf /bin/bash 
 

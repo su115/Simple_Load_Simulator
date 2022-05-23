@@ -1,0 +1,44 @@
+{
+	"name": "Simulation-1",
+	"repeat": 3,
+	"threads": 4,
+	"detached": false,
+	"session": {
+
+		"name": "WSession-1",
+		"port": ":443",
+		"protocol": "https",
+
+
+		"ip": "api.agify.io",
+		"allow_redirects": true,
+		"proxies": {
+			"http": "{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}",
+			"https": "{proxies_protocol}://{proxies_user}:{proxies_pass}@{proxies_ip}:{proxies_port}"
+		},
+		"timeout": [10, 20],
+		"verify": false,
+		"list_req": [{
+			"location": "/",
+			"name": "first-req",
+			"headers": {
+				"my_header": "value"
+			},
+			"params": {
+				"my_param1": "value",
+				"my_param2": "another_value"
+			},
+			"data": {
+				"my_data": "value"
+			},
+			"method": "GET",
+			"posible_status_code": [200, 404],
+			"expected_status_code": 200,
+			"expected_text": "health",
+			"expected_headers": {
+				"my_header": "value"
+			},
+			"delay": 0.1
+		}]
+	}
+}
